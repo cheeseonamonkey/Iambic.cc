@@ -7,110 +7,19 @@
 <title>Iambic — Prosody Notation</title>
 <link rel="canonical" href="https://iambic.cc/">
 <meta name="description" content="A small, mobile-first prosody and scansion notation tool for poetry.">
-<script>
-try {
-  const saved=localStorage.getItem("prosody-theme");
-  const dark=saved? saved==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.dataset.theme=dark?"dark":"light";
-} catch {}
-</script>
+<script>document.documentElement.classList.add("booting");try{const saved=localStorage.getItem("prosody-theme");const dark=saved?saved==="dark":matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=dark?"dark":"light"}catch{}</script>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<div id="boot" class="boot" role="status"><div class="boot-brand">Iambic</div><div class="boot-note">Preparing scansion…</div></div>
 <div class="app">
-<header class="topbar">
-  <div class="header">
-    <div class="brand">Iambic</div>
-    <div class="head-group">
-      <button id="demoBtn" class="btn" title="Load a random demo poem">Demo</button>
-    </div>
-    <div class="head-group">
-      <button id="themeBtn" class="iconbtn" aria-label="Toggle theme" title="Toggle theme">◐</button>
-      <button id="helpBtn" class="iconbtn hidden" aria-label="Notation guide" title="Notation guide">?</button>
-      <button id="exportBtn" class="iconbtn hidden" aria-label="Export" title="Export">⋯</button>
-    </div>
-  </div>
-  <div id="viewWrap" class="viewwrap hidden">
-    <div id="viewStrip" class="viewstrip">
-      <div class="control-group">
-        <button class="chip active" data-toggle="marks">Marks</button>
-        <button class="chip" data-toggle="typography">Typography</button>
-      </div>
-      <div class="control-group">
-        <button class="chip active" data-toggle="counts">Counts</button>
-        <button class="chip active" data-toggle="structure">Structure</button>
-      </div>
-      <div class="control-group">
-        <button id="undoBtn" class="iconbtn hidden" aria-label="Undo" title="Undo">↶</button>
-        <button id="redoBtn" class="iconbtn hidden" aria-label="Redo" title="Redo">↷</button>
-        <button id="editBtn" class="chip hidden">Edit</button>
-        <button id="statsBtn" class="chip hidden">Stats</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main>
-  <section id="intro" class="intro">
-    <h1>Hear the shape of a line.</h1>
-    <p class="sub">Paste or write a poem. Automatic scansion stays automatic; use brackets only when you want to override it.</p>
-    <textarea id="sourceText" class="editor" spellcheck="true" placeholder="Paste or write a poem…"></textarea>
-    <div class="actions"><button id="analyzeBtn" class="btn primary">Annotate</button></div>
-  </section>
-
-  <section id="workspace" class="hidden" aria-live="polite">
-    <div class="hint"><span>Manual override: [weak] [STRONG] · adjacent brackets force syllable breaks</span><span id="saveState">Saved locally</span></div>
-    <div id="poemMeta" class="poem-meta hidden"></div>
-    <div id="poem" class="poem show-marks"></div>
-    <div id="poemSummary" class="poem-summary"></div>
-  </section>
-</main>
-
-<footer class="footer"><a href="https://github.com/cheeseonamonkey/Iambic.cc" target="_blank" rel="noopener noreferrer">Made with love.</a></footer>
-</div>
-
-<dialog id="statsDialog">
-  <div class="dialog-head"><strong>Poem stats</strong><button class="iconbtn" data-close="statsDialog">×</button></div>
-  <div class="dialog-body" id="statsBody"></div>
-</dialog>
-
-<dialog id="editDialog" class="edit-dialog">
-  <div class="dialog-head"><strong>Edit source</strong><button class="iconbtn" data-close="editDialog">×</button></div>
-  <div class="dialog-body">
-    <textarea id="editText" class="editor" spellcheck="true"></textarea>
-    <p class="minihelp"><code>[SA][li][enc][cy]</code> forces four syllables; all-caps bracket contents are strong. Escape literal brackets as <code>\[</code> and <code>\]</code>.</p>
-  </div>
-  <div class="dialog-foot"><button class="btn ghost" data-close="editDialog">Cancel</button><button id="applyEditBtn" class="btn primary">Apply</button></div>
-</dialog>
-
-<dialog id="helpDialog">
-  <div class="dialog-head"><strong>Notation guide</strong><button class="iconbtn" data-close="helpDialog">×</button></div>
-  <div class="dialog-body">
-    <div class="guide">
-      <div class="guide-row"><div class="guide-term">[weak]</div><div>One explicit weak/unstressed syllable.</div></div>
-      <div class="guide-row"><div class="guide-term">[STRONG]</div><div>One explicit strong/stressed syllable. Capitalization is preserved exactly as typed.</div></div>
-      <div class="guide-row"><div class="guide-term">[VE][ry]</div><div>Adjacent brackets force syllable boundaries without inserting spaces.</div></div>
-      <div class="guide-row"><div class="guide-term">\[ \]</div><div>Escaped brackets are literal text, not notation.</div></div>
-      <div class="guide-row"><div class="guide-term">´ / ˘</div><div>Unicode export uses an acute mark for strong syllables and a breve for weak syllables.</div></div>
-      <div class="guide-row"><div class="guide-term">Structure</div><div>Shows stanza summaries and any detected foot/caesura boundaries together.</div></div>
-    </div>
-    <div class="guide-note">Manual bracket syntax always wins. Unbracketed text is analyzed automatically and the original spelling/capitalization is retained.</div>
-  </div>
-</dialog>
-
-<dialog id="exportDialog">
-  <div class="dialog-head"><strong>Export</strong><button class="iconbtn" data-close="exportDialog">×</button></div>
-  <div class="dialog-body export-actions">
-    <button id="copyAnnotatedBtn" class="btn">Copy annotated text</button>
-    <button id="downloadTxtBtn" class="btn">Download annotated .txt</button>
-    <button id="downloadPngBtn" class="btn">Download image (.png)</button>
-    <button id="printPdfBtn" class="btn">Save / print PDF</button>
-  </div>
-</dialog>
-<div id="toast" class="toast" role="status"></div>
-
-<script src="./app-1.js"></script>
-<script src="./app-2.js"></script>
-<script src="./app-3.js"></script>
-</body>
-</html>
+<header class="topbar"><div class="header"><div class="brand">Iambic</div><div class="head-group"><button id="demoBtn" class="btn" title="Load a random demo poem">Demo</button></div><div class="head-group"><button id="themeBtn" class="iconbtn" aria-label="Toggle theme" title="Toggle theme">◐</button><button id="helpBtn" class="iconbtn hidden" aria-label="Notation guide" title="Notation guide">?</button><button id="exportBtn" class="iconbtn hidden" aria-label="Export" title="Export">⋯</button></div></div><div id="viewWrap" class="viewwrap hidden"><div id="viewStrip" class="viewstrip"><div class="control-group"><button class="chip active" data-toggle="marks">Marks</button><button class="chip" data-toggle="typography">Typography</button></div><div class="control-group"><button class="chip active" data-toggle="counts">Counts</button><button class="chip active" data-toggle="structure">Structure</button></div><div class="control-group"><button id="undoBtn" class="iconbtn hidden" aria-label="Undo" title="Undo">↶</button><button id="redoBtn" class="iconbtn hidden" aria-label="Redo" title="Redo">↷</button><button id="editBtn" class="chip hidden">Edit</button><button id="statsBtn" class="chip hidden">Stats</button></div></div></div></header>
+<main><section id="intro" class="intro"><h1>Hear the shape of a line.</h1><p class="sub">Paste or write a poem. Automatic scansion stays automatic; use brackets only when you want to override it.</p><textarea id="sourceText" class="editor" spellcheck="true" placeholder="Paste or write a poem…"></textarea><div class="actions"><button id="analyzeBtn" class="btn primary">Annotate</button></div></section><section id="workspace" class="hidden" aria-live="polite"><div class="hint"><span>Manual override: &lt;weak&gt; [strong] · adjacent annotations force syllable breaks</span><span id="saveState">Saved locally</span></div><div id="poemMeta" class="poem-meta hidden"></div><div id="poem" class="poem show-marks"></div><div id="poemSummary" class="poem-summary"></div></section></main>
+<footer class="footer"><a href="https://github.com/cheeseonamonkey/Iambic.cc" target="_blank" rel="noopener noreferrer">Made with love.</a></footer></div>
+<dialog id="statsDialog"><div class="dialog-head"><strong>Poem stats</strong><button class="iconbtn" data-close="statsDialog">×</button></div><div class="dialog-body" id="statsBody"></div></dialog>
+<dialog id="editDialog" class="edit-dialog"><div class="dialog-head"><strong>Edit source</strong><button class="iconbtn" data-close="editDialog">×</button></div><div class="dialog-body"><textarea id="editText" class="editor" spellcheck="true"></textarea><p class="minihelp"><code>[Sa]&lt;li&gt;&lt;enc&gt;&lt;cy&gt;</code> forces four syllables while preserving capitalization; <code>[...]</code> is strong and <code>&lt;...&gt;</code> weak. Escape literal delimiters with a backslash.</p></div><div class="dialog-foot"><button class="btn ghost" data-close="editDialog">Cancel</button><button id="applyEditBtn" class="btn primary">Apply</button></div></dialog>
+<dialog id="helpDialog"><div class="dialog-head"><strong>Notation guide</strong><button class="iconbtn" data-close="helpDialog">×</button></div><div class="dialog-body"><div class="guide"><div class="guide-row"><div class="guide-term">[strong]</div><div>One explicit strong/stressed syllable.</div></div><div class="guide-row"><div class="guide-term">&lt;weak&gt;</div><div>One explicit weak/unstressed syllable.</div></div><div class="guide-row"><div class="guide-term">[Ve]&lt;ry&gt;</div><div>Adjacent annotations force syllable boundaries without changing capitalization or inserting spaces.</div></div><div class="guide-row"><div class="guide-term">\[ \] \&lt; \&gt;</div><div>Escaped delimiters are literal text, not notation.</div></div><div class="guide-row"><div class="guide-term">Structure</div><div>Shows stanza summaries and detected structure together.</div></div></div><div class="guide-note">Manual annotation always wins. Unannotated text is analyzed automatically and original spelling/capitalization is retained.</div></div></dialog>
+<dialog id="exportDialog"><div class="dialog-head"><strong>Export</strong><button class="iconbtn" data-close="exportDialog">×</button></div><div class="dialog-body export-actions"><button id="copyAnnotatedBtn" class="btn">Copy annotated text</button><button id="downloadTxtBtn" class="btn">Download annotated .txt</button><button id="downloadPngBtn" class="btn">Download image (.png)</button><button id="printPdfBtn" class="btn">Save / print PDF</button></div></dialog><div id="toast" class="toast" role="status"></div>
+<script src="./app-1.js"></script><script src="./app-2.js"></script><script src="./app-3.js"></script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))</script>
+</body></html>
