@@ -3,44 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f7f6f2">
+<meta name="theme-color" content="#f6f5f1">
 <title>Iambic — Prosody Notation</title>
 <link rel="canonical" href="https://iambic.cc/">
 <meta name="description" content="A small, mobile-first prosody and scansion notation tool for poetry.">
 <script>
-try{
-  const t=localStorage.getItem("prosody-theme");
-  if(t==="light"||t==="dark") document.documentElement.dataset.theme=t;
-}catch{}
+try {
+  const saved=localStorage.getItem("prosody-theme");
+  const dark=saved? saved==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme=dark?"dark":"light";
+} catch {}
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <link rel="stylesheet" href="./style.css">
 </head>
-<body class="min-h-dvh antialiased selection:bg-stone-300/60 dark:selection:bg-stone-700/70">
-<div class="app min-h-dvh">
-<header class="topbar sticky top-0 z-20">
-  <div class="header mx-auto flex w-full max-w-[900px] items-center gap-1.5">
-    <div class="brand mr-auto tracking-tight">Prosody</div>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="header">
+    <div class="brand">Iambic</div>
     <div class="head-group">
-      <button id="demoBtn" class="btn" title="Load a demo poem">Demo</button>
-      <button id="copyMdBtn" class="btn hidden" title="Copy annotated Markdown">Copy MD</button>
+      <button id="demoBtn" class="btn" title="Load a random demo poem">Demo</button>
     </div>
     <div class="head-group">
-      <button id="themeBtn" class="iconbtn" aria-label="Theme: system" title="Theme: system">◐</button>
+      <button id="themeBtn" class="iconbtn" aria-label="Toggle theme" title="Toggle theme">◐</button>
       <button id="helpBtn" class="iconbtn hidden" aria-label="Notation guide" title="Notation guide">?</button>
       <button id="exportBtn" class="iconbtn hidden" aria-label="Export" title="Export">⋯</button>
     </div>
   </div>
-  <div id="viewWrap" class="viewwrap hidden mx-auto w-full max-w-[900px]">
-    <div id="viewStrip" class="viewstrip flex overflow-x-auto">
+  <div id="viewWrap" class="viewwrap hidden">
+    <div id="viewStrip" class="viewstrip">
       <div class="control-group">
         <button class="chip active" data-toggle="marks">Marks</button>
         <button class="chip" data-toggle="typography">Typography</button>
       </div>
       <div class="control-group">
         <button class="chip active" data-toggle="counts">Counts</button>
-        <button class="chip active" data-toggle="stanzas">Stanzas</button>
-        <button class="chip active" data-toggle="boundaries">Boundaries</button>
+        <button class="chip active" data-toggle="structure">Structure</button>
       </div>
       <div class="control-group">
         <button id="undoBtn" class="iconbtn hidden" aria-label="Undo" title="Undo">↶</button>
@@ -51,58 +49,64 @@ try{
     </div>
   </div>
 </header>
-<main class="mx-auto w-full max-w-[900px] flex-1">
-  <section id="intro" class="intro mx-auto max-w-2xl">
-    <h1 class="text-balance">Hear the shape of a line.</h1>
-    <p class="sub max-w-xl">Paste a poem, then tap syllables to mark rhythm. Long-press a word to correct its syllable breaks.</p>
-    <textarea id="sourceText" class="editor block w-full" spellcheck="true" placeholder="Paste or write a poem…"></textarea>
-    <div class="actions flex justify-end"><button id="analyzeBtn" class="btn primary">Annotate</button></div>
+
+<main>
+  <section id="intro" class="intro">
+    <h1>Hear the shape of a line.</h1>
+    <p class="sub">Paste or write a poem. Automatic scansion stays automatic; use brackets only when you want to override it.</p>
+    <textarea id="sourceText" class="editor" spellcheck="true" placeholder="Paste or write a poem…"></textarea>
+    <div class="actions"><button id="analyzeBtn" class="btn primary">Annotate</button></div>
   </section>
+
   <section id="workspace" class="hidden" aria-live="polite">
-    <div class="hint flex items-center justify-between gap-3"><span>Tap: cycle stress · Long-press: syllables</span><span id="saveState">Saved locally</span></div>
+    <div class="hint"><span>Manual override: [weak] [STRONG] · adjacent brackets force syllable breaks</span><span id="saveState">Saved locally</span></div>
     <div id="poemMeta" class="poem-meta hidden"></div>
-    <div id="poem" class="poem mode-marks"></div>
+    <div id="poem" class="poem show-marks"></div>
     <div id="poemSummary" class="poem-summary"></div>
   </section>
 </main>
-<footer class="footer mx-auto w-full max-w-[900px] text-center"><a href="https://github.com/cheeseonamonkey/Iambic.cc" target="_blank" rel="noopener noreferrer">Made with love.</a></footer>
+
+<footer class="footer"><a href="https://github.com/cheeseonamonkey/Iambic.cc" target="_blank" rel="noopener noreferrer">Made with love.</a></footer>
 </div>
 
-<nav id="contextBar" class="contextbar hidden flex items-center gap-1.5 overflow-x-auto" aria-label="Syllable controls">
-  <button data-stress="weak">× Weak</button><button data-stress="medium">• Medium</button><button data-stress="strong">/ Strong</button><button data-stress="">Clear</button><button data-boundary="foot">After |</button><button data-boundary="caesura">After ‖</button><button id="syllablesBtn">Syllables…</button>
-</nav>
-
-<dialog id="demoDialog">
-  <div class="dialog-head flex items-center gap-2"><strong>Demo poems</strong><span id="demoCount" class="demo-count"></span><button class="iconbtn" data-close="demoDialog">×</button></div>
-  <div class="dialog-body overflow-y-auto">
-    <div class="demo-tools"><input id="demoSearch" type="search" placeholder="Search author, title, rhythm…" aria-label="Search demo poems"></div>
-    <div id="demoList" class="demo-list"></div>
-    <p class="demo-note">Public-domain poems can be bundled in full. Copyrighted poems use brief excerpts with a source link.</p>
-  </div>
+<dialog id="statsDialog">
+  <div class="dialog-head"><strong>Poem stats</strong><button class="iconbtn" data-close="statsDialog">×</button></div>
+  <div class="dialog-body" id="statsBody"></div>
 </dialog>
-<dialog id="statsDialog"><div class="dialog-head flex items-center gap-2"><strong>Poem stats</strong><button class="iconbtn" data-close="statsDialog">×</button></div><div class="dialog-body overflow-y-auto" id="statsBody"></div></dialog>
-<dialog id="editDialog" class="edit-dialog"><div class="dialog-head flex items-center gap-2"><strong>Edit text</strong><button class="iconbtn" data-close="editDialog">×</button></div><div class="dialog-body overflow-y-auto"><textarea id="editText" class="editor" spellcheck="true"></textarea><p class="minihelp">Unchanged syllables keep annotations where they can be matched.</p></div><div class="dialog-foot flex justify-end gap-2"><button class="btn ghost" data-close="editDialog">Cancel</button><button id="applyEditBtn" class="btn primary">Apply</button></div></dialog>
-<dialog id="wordDialog"><div class="dialog-head flex items-center gap-2"><strong>Syllable breaks</strong><button class="iconbtn" data-close="wordDialog">×</button></div><div class="dialog-body overflow-y-auto"><label class="field-label" for="wordSplitInput">Use · between syllables</label><input id="wordSplitInput" type="text" autocapitalize="off" autocomplete="off"><p class="minihelp">Example: <b>dread·locks</b>. Keep the spelling itself unchanged.</p></div><div class="dialog-foot flex justify-end gap-2"><button class="btn ghost" data-close="wordDialog">Cancel</button><button id="applyWordBtn" class="btn primary">Apply</button></div></dialog>
+
+<dialog id="editDialog" class="edit-dialog">
+  <div class="dialog-head"><strong>Edit source</strong><button class="iconbtn" data-close="editDialog">×</button></div>
+  <div class="dialog-body">
+    <textarea id="editText" class="editor" spellcheck="true"></textarea>
+    <p class="minihelp"><code>[SA][li][enc][cy]</code> forces four syllables; all-caps bracket contents are strong. Escape literal brackets as <code>\[</code> and <code>\]</code>.</p>
+  </div>
+  <div class="dialog-foot"><button class="btn ghost" data-close="editDialog">Cancel</button><button id="applyEditBtn" class="btn primary">Apply</button></div>
+</dialog>
 
 <dialog id="helpDialog">
-  <div class="dialog-head flex items-center gap-2"><strong>Notation guide</strong><button class="iconbtn" data-close="helpDialog">×</button></div>
-  <div class="dialog-body overflow-y-auto">
+  <div class="dialog-head"><strong>Notation guide</strong><button class="iconbtn" data-close="helpDialog">×</button></div>
+  <div class="dialog-body">
     <div class="guide">
-      <div class="guide-row"><div class="guide-term">/ strong</div><div>A strongly stressed or emphasized syllable. <a href="https://www.poetryfoundation.org/education/glossary/Stress" target="_blank" rel="noopener">Stress ↗</a></div></div>
-      <div class="guide-row"><div class="guide-term">× weak</div><div>An unstressed or relatively weak syllable. Stress can shift with phrasing, meaning, and performance.</div></div>
-      <div class="guide-row"><div class="guide-term">• medium</div><div>An intentionally loose in-between mark for performance weight; not part of a rigid binary scansion system.</div></div>
-      <div class="guide-row"><div class="guide-term">| foot</div><div>A boundary between metrical <a href="https://www.poetryfoundation.org/education/glossary/Foot" target="_blank" rel="noopener">feet ↗</a>, such as iambs or trochees.</div></div>
-      <div class="guide-row"><div class="guide-term">‖ pause</div><div>A <a href="https://www.poetryfoundation.org/education/glossary/caesura" target="_blank" rel="noopener">caesura ↗</a>: a noticeable pause or break inside a line.</div></div>
-      <div class="guide-row"><div class="guide-term">Meter</div><div>The recurring pattern of stressed and unstressed syllables. <a href="https://www.poetryfoundation.org/education/glossary/meter" target="_blank" rel="noopener">Meter ↗</a></div></div>
-      <div class="guide-row"><div class="guide-term">Scansion</div><div>The practice of marking and analyzing a poem’s rhythmic structure. <a href="https://www.poetryfoundation.org/education/glossary/scansion" target="_blank" rel="noopener">Scansion ↗</a></div></div>
-      <div class="guide-row"><div class="guide-term">Prosody</div><div>The broader study of poetic rhythm and metrical structure. <a href="https://www.poetryfoundation.org/education/glossary/prosody" target="_blank" rel="noopener">Prosody ↗</a></div></div>
+      <div class="guide-row"><div class="guide-term">[weak]</div><div>One explicit weak/unstressed syllable.</div></div>
+      <div class="guide-row"><div class="guide-term">[STRONG]</div><div>One explicit strong/stressed syllable. Capitalization is preserved exactly as typed.</div></div>
+      <div class="guide-row"><div class="guide-term">[VE][ry]</div><div>Adjacent brackets force syllable boundaries without inserting spaces.</div></div>
+      <div class="guide-row"><div class="guide-term">\[ \]</div><div>Escaped brackets are literal text, not notation.</div></div>
+      <div class="guide-row"><div class="guide-term">´ / ˘</div><div>Unicode export uses an acute mark for strong syllables and a breve for weak syllables.</div></div>
+      <div class="guide-row"><div class="guide-term">Structure</div><div>Shows stanza summaries and any detected foot/caesura boundaries together.</div></div>
     </div>
-    <div class="guide-note">These marks describe a reading, not a verdict. English stress is context-sensitive, and good lines often bend or resist a regular meter.</div><div class="guide-note"><strong>Community poems</strong><br>The demo library comes from <code>poems.json</code> beside this page. Each contribution needs <code>title</code>, <code>author</code>, <code>text</code>, and <code>license</code>. Optional: <code>tags</code>, <code>source</code>, and <code>excerpt</code>.</div>
-    <div class="resources"><a href="https://www.poetryfoundation.org/education/glossary/scansion" target="_blank" rel="noopener">Scansion primer ↗</a><a href="https://en.wikipedia.org/wiki/Poetry_analysis#Meter_and_rhythm" target="_blank" rel="noopener">Meter + rhythm overview ↗</a></div>
+    <div class="guide-note">Manual bracket syntax always wins. Unbracketed text is analyzed automatically and the original spelling/capitalization is retained.</div>
   </div>
 </dialog>
 
-<dialog id="exportDialog"><div class="dialog-head flex items-center gap-2"><strong>Export</strong><button class="iconbtn" data-close="exportDialog">×</button></div><div class="dialog-body overflow-y-auto" style="display:grid;gap:8px"><button id="copyAnnotatedBtn" class="btn">Copy annotated text</button><button id="downloadTxtBtn" class="btn">Download annotated .txt</button><button id="downloadJsonBtn" class="btn">Download project .json</button><button id="newPoemBtn" class="btn ghost">New poem</button></div></dialog>
+<dialog id="exportDialog">
+  <div class="dialog-head"><strong>Export</strong><button class="iconbtn" data-close="exportDialog">×</button></div>
+  <div class="dialog-body export-actions">
+    <button id="copyAnnotatedBtn" class="btn">Copy annotated text</button>
+    <button id="downloadTxtBtn" class="btn">Download annotated .txt</button>
+    <button id="downloadPngBtn" class="btn">Download image (.png)</button>
+    <button id="printPdfBtn" class="btn">Save / print PDF</button>
+  </div>
+</dialog>
 <div id="toast" class="toast" role="status"></div>
 
 <script src="./app-1.js"></script>
