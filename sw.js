@@ -1,7 +1,7 @@
 "use strict";
 
-const CACHE="iambic-runtime-v3",STAMP="./__iambic_cache_last_used__",TTL=7*24*60*60*1000;
-const CORE=["./","./index.html","./style.css","./js/prosody.js","./js/notation.js","./js/render.js","./js/ui.js","./poems.json"];
+const CACHE="iambic-runtime-v4",STAMP="./__iambic_cache_last_used__",TTL=7*24*60*60*1000;
+const CORE=["./","./index.html","./style.css","./js/analysis/lexicon.js","./js/analysis/stress.js","./js/analysis/syllables.js","./js/prosody.js","./js/notation.js","./js/render.js","./js/ui.js","./poems.json"];
 const HEAVY=/\.(?:wasm|onnx|bin|data|db|sqlite)$/i;
 async function touch(c){await c.put(STAMP,new Response(String(Date.now())))}
 async function fresh(c){const r=await c.match(STAMP);return!!r&&Date.now()-Number(await r.text())<TTL}
