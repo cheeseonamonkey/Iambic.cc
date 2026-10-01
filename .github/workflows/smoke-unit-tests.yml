@@ -26,7 +26,6 @@ jobs:
         run: |
           node --check js/prosody.js
           node --check js/notation.js
-          node --check app-pronunciation.js
           node --check js/render.js
           node --check js/ui.js
           node --check sw.js
