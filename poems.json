@@ -1,165 +1,38 @@
 [
   {
     "title": "Autumn Referendum",
-    "author": "Dev",
-    "text": "Each leaf casts its vote.\nThe Autumn Referendum\nThe republic stands.",
-    "license": "Copyright © Dev; included with permission",
-    "tags": [
-      "haiku · 5–7–5"
-    ]
-  },
-  {
-    "title": "A Very Short Song",
-    "author": "Dorothy Parker",
-    "text": "Once when I was young and true,\nSomeone left me sad—\nBroke my brittle heart in two;\nAnd that is very bad.\n\nLove is for unlucky folk,\nLove is but a curse.\nOnce there was a heart I broke;\nAnd that, I think, is worse.",
-    "license": "Public Domain",
-    "tags": ["tight quatrains"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "Anecdote",
-    "author": "Dorothy Parker",
-    "text": "So silent I when Love was by\nHe yawned, and turned away;\nBut Sorrow clings to my apron-strings,\nI have so much to say.",
-    "license": "Public Domain",
-    "tags": ["compact / sprung"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "For a Sad Lady",
-    "author": "Dorothy Parker",
-    "text": "And let her loves, when she is dead,\nWrite this above her bones:\n\"No more she lives to give us bread\nWho asked her only stones.\"",
-    "license": "Public Domain",
-    "tags": ["regular quatrain"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "Wail",
-    "author": "Dorothy Parker",
-    "text": "Love has gone a-rocketing.\nThat is not the worst;\nI could do without the thing,\nAnd not be the first.\n\nJoy has gone the way it came.\nThat is nothing new;\nI could get along the same,—\nMany people do.\n\nDig for me the narrow bed,\nNow I am bereft.\nAll my pretty hates are dead,\nAnd what have I left?",
-    "license": "Public Domain",
-    "tags": ["short regular lines"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "Light of Love",
-    "author": "Dorothy Parker",
-    "text": "Joy stayed with me a night—\nYoung and free and fair—\nAnd in the morning light\nHe left me there.\n\nThen Sorrow came to stay,\nAnd lay upon my breast;\nHe walked with me in the day,\nAnd knew me best.",
-    "license": "Public Domain",
-    "tags": ["four-beat feel"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "Recurrence",
-    "author": "Dorothy Parker",
-    "text": "We shall have our little day.\nTake my hand and travel still\nRound and round the little way,\nUp and down the little hill.\n\nIt is good to love again;\nScan the renovated skies,\nDip and drive the idling pen,\nSweetly tint the paling lies.",
-    "license": "Public Domain",
-    "tags": ["regular / ballad-like"],
-    "source": "https://www.gutenberg.org/ebooks/68353"
-  },
-  {
-    "title": "A Dream Within a Dream",
-    "author": "Edgar Allan Poe",
-    "text": "Take this kiss upon the brow!\nAnd, in parting from you now,\nThus much let me avow—\nYou are not wrong, who deem\nThat my days have been a dream:\nYet if hope has flown away\nIn a night, or in a day,\nIn a vision, or in none,\nIs it therefore the less gone?\nAll that we see or seem\nIs but a dream within a dream.\n\nI stand amid the roar\nOf a surf-tormented shore,\nAnd I hold within my hand\nGrains of the golden sand—\nHow few! yet how they creep\nThrough my fingers to the deep,\nWhile I weep—while I weep!\nO God! can I not grasp\nThem with a tighter clasp?\nO God! can I not save\nOne from the pitiless wave?\nIs all that we see or seem\nBut a dream within a dream?",
-    "license": "Public Domain",
-    "tags": ["mixed short lines"],
-    "source": "https://www.gutenberg.org/ebooks/76996"
-  },
-  {
-    "title": "Annabel Lee",
-    "author": "Edgar Allan Poe",
-    "text": "It was many and many a year ago\nIn a kingdom by the sea,\nThat a maiden there lived whom you may know\nBy the name of Annabel Lee;\nAnd this maiden she lived with no other thought\nThan to love and be loved by me.\n\nI was a child and she was a child,\nIn this kingdom by the sea:\nBut we loved with a love that was more than love—\nI and my Annabel Lee;\nWith a love that the wingèd seraphs of heaven\nCoveted her and me.",
-    "license": "Public Domain",
-    "tags": ["ballad / anapestic pull"],
-    "source": "https://www.gutenberg.org/ebooks/76996",
-    "excerpt": true
-  },
-  {
-    "title": "The Bells",
-    "author": "Edgar Allan Poe",
-    "text": "Hear the mellow wedding bells,\nGolden bells!\nWhat a world of happiness their harmony foretells!\nThrough the balmy air of night\nHow they ring out their delight!\nFrom the molten-golden notes,\nAnd all in tune,\nWhat a liquid ditty floats.",
-    "license": "Public Domain",
-    "tags": ["strong sound patterning"],
-    "source": "https://www.gutenberg.org/ebooks/76996",
-    "excerpt": true
-  },
-  {
-    "title": "The Raven",
-    "author": "Edgar Allan Poe",
-    "text": "Then this ebony bird beguiling my sad fancy into smiling\nBy the grave and stem decorum of the countenance it wore,\nThough thy crest be shorn and shaven, thou, I said, art sure no craven,\nGhastly grim and ancient Raven wandering from the nightly shore—\nTell me what thy lordly name is on the Night’s Plutonian shore?\nQuoth the Raven, Nevermore.",
-    "license": "Public Domain",
-    "tags": ["trochaic / catalectic"],
-    "source": "https://www.gutenberg.org/ebooks/1065",
-    "excerpt": true
-  },
-  {
-    "title": "Bluebird",
-    "author": "Charles Bukowski",
-    "text": "there’s a bluebird in my heart that\nwants to get out",
-    "license": "Copyrighted excerpt; original copyright retained by author/rightsholder",
-    "tags": ["free verse"],
-    "source": "https://www.poetryfoundation.org/poetry-news/62906/bukowskis-the-blue-bird-animated",
-    "excerpt": true
-  },
-  {
-    "title": "8 count",
-    "author": "Charles Bukowski",
-    "text": "from my bed\nI watch\n3 birds\non a telephone wire.",
-    "license": "Copyrighted excerpt; original copyright retained by author/rightsholder",
-    "tags": ["free verse / clipped"],
-    "source": "https://www.poetryfoundation.org/poems/49699/8-count",
-    "excerpt": true
-  },
-  {
-    "title": "the weather is hot…",
-    "author": "Charles Bukowski",
-    "text": "I’m too old to argue,\nI’ve gone with the poem",
-    "license": "Copyrighted excerpt; original copyright retained by author/rightsholder",
-    "tags": ["free verse / conversational"],
-    "source": "https://www.poetryfoundation.org/poems/49576/the-weather-is-hot-on-the-back-of-my-watch",
-    "excerpt": true
-  },
-  {
-    "title": "The Tyger",
-    "author": "William Blake",
-    "text": "Tyger Tyger, burning bright,\nIn the forests of the night;\nWhat immortal hand or eye,\nCould frame thy fearful symmetry?",
-    "license": "Public Domain",
-    "tags": ["trochaic / pounding"],
-    "source": "https://www.poetryfoundation.org/poems/43687/the-tyger",
-    "excerpt": true
-  },
-  {
-    "title": "Because I could not stop for Death",
-    "author": "Emily Dickinson",
-    "text": "Because I could not stop for Death –\nHe kindly stopped for me –\nThe Carriage held but just Ourselves –\nAnd Immortality.",
-    "license": "Public Domain",
-    "tags": ["common meter"],
-    "source": "https://www.poetryfoundation.org/poems/47652/because-i-could-not-stop-for-death-479",
-    "excerpt": true
-  },
-  {
-    "title": "Stopping by Woods",
-    "author": "Robert Frost",
-    "text": "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.",
-    "license": "Public Domain",
-    "tags": ["iambic tetrameter"],
-    "source": "https://www.poetryfoundation.org/poems/42891/stopping-by-woods-on-a-snowy-evening",
-    "excerpt": true
-  },
-  {
-    "title": "The Red Wheelbarrow",
-    "author": "William Carlos Williams",
-    "text": "so much depends\nupon\n\na red wheel\nbarrow\n\nglazed with rain\nwater\n\nbeside the white\nchickens",
-    "license": "Public Domain",
-    "tags": ["free verse / phrase rhythm"],
-    "source": "https://www.poetryfoundation.org/poems/45502/the-red-wheelbarrow"
+    "author": "cheeseonamonkey",
+    "content": "Each leaf casts its vote\nThe Autumn Referendum\nThe republic stands.",
+    "url": ""
   },
   {
     "title": "Sonnet 18",
     "author": "William Shakespeare",
-    "text": "Shall I compare thee to a summer’s day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer’s lease hath all too short a date.",
-    "license": "Public Domain",
-    "tags": ["iambic pentameter"],
-    "source": "https://www.poetryfoundation.org/poems/45087/sonnet-18-shall-i-compare-thee-to-a-summers-day",
-    "excerpt": true
+    "content": "Shall I compare thee to a summer’s day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer’s lease hath all too short a date;\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature’s changing course untrimm'd;\nBut thy eternal summer shall not fade,\nNor lose possession of that fair thou ow’st;\nNor shall Death brag thou wander’st in his shade,\nWhen in eternal lines to time thou grow’st:\nSo long as men can breathe or eyes can see,\nSo long lives this, and this gives life to thee.",
+    "url": "https://www.poetryfoundation.org/poems/45087/sonnet-18-shall-i-compare-thee-to-a-summers-day"
+  },
+  {
+    "title": "Anecdote",
+    "author": "Dorothy Parker",
+    "content": "So silent I when Love was by\nHe yawned, and turned away;\nBut Sorrow clings to my apron-strings,\nI have so much to say.",
+    "url": "https://www.gutenberg.org/ebooks/68353"
+  },
+  {
+    "title": "One Perfect Rose",
+    "author": "Dorothy Parker",
+    "content": "A single flow'r he sent me, since we met.\nAll tenderly his messenger he chose;\nDeep-hearted, pure, with scented dew still wet—\nOne perfect rose.\n\nI knew the language of the floweret;\n“My fragile leaves,” it said, “his heart enclose.”\nLove long has taken for his amulet\nOne perfect rose.\n\nWhy is it no one ever sent me yet\nOne perfect limousine, do you suppose?\nAh no, it's always just my luck to get\nOne perfect rose.",
+    "url": "https://www.gutenberg.org/ebooks/68353"
+  },
+  {
+    "title": "The Conqueror Worm",
+    "author": "Edgar Allan Poe",
+    "content": "Lo! 'tis a gala night\nWithin the lonesome latter years!\nAn angel throng, bewinged, bedight\nIn veils, and drowned in tears,\nSit in a theatre, to see\nA play of hopes and fears,\nWhile the orchestra breathes fitfully\nThe music of the spheres.\n\nMimes, in the form of God on high,\nMutter and mumble low,\nAnd hither and thither fly—\nMere puppets they who come and go\nAt bidding of vast formless things\nThat shift the scenery to and fro,\nFlapping from out their Condor wings\nInvisible Wo!\n\nThat motley drama—oh, be sure\nIt shall not be forgot!\nWith its Phantom chased for evermore\nBy a crowd that seize it not,\nThrough a circle that ever returneth in\nTo the self-same spot,\nAnd much of Madness, and more of Sin,\nAnd Horror the soul of the plot.\n\nBut see, amid the mimic rout,\nA crawling shape intrude!\nA blood-red thing that writhes from out\nThe scenic solitude!\nIt writhes!—it writhes!—with mortal pangs\nThe mimes become its food,\nAnd seraphs sob at vermin fangs\nIn human gore imbued.\n\nOut—out are the lights—out all!\nAnd, over each quivering form,\nThe curtain, a funeral pall,\nComes down with the rush of a storm,\nWhile the angels, all pallid and wan,\nUprising, unveiling, affirm\nThat the play is the tragedy, “Man,”\nAnd its hero, the Conqueror Worm.",
+    "url": "https://www.gutenberg.org/ebooks/76996"
+  },
+  {
+    "title": "A Dream Within a Dream",
+    "author": "Edgar Allan Poe",
+    "content": "Take this kiss upon the brow!\nAnd, in parting from you now,\nThus much let me avow—\nYou are not wrong, who deem\nThat my days have been a dream:\nYet if hope has flown away\nIn a night, or in a day,\nIn a vision, or in none,\nIs it therefore the less gone?\nAll that we see or seem\nIs but a dream within a dream.\n\nI stand amid the roar\nOf a surf-tormented shore,\nAnd I hold within my hand\nGrains of the golden sand—\nHow few! yet how they creep\nThrough my fingers to the deep,\nWhile I weep—while I weep!\nO God! can I not grasp\nThem with a tighter clasp?\nO God! can I not save\nOne from the pitiless wave?\nIs all that we see or seem\nBut a dream within a dream?",
+    "url": "https://www.gutenberg.org/ebooks/76996"
   }
 ]
