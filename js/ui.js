@@ -28,5 +28,5 @@ $("#downloadTxtBtn").addEventListener("click",()=>downloadText("iambic.txt",anno
 $("#downloadPngBtn").addEventListener("click",downloadPng);$("#printPdfBtn").addEventListener("click",printPdf);
 $$('[data-close]').forEach(b=>b.addEventListener("click",()=>$("#"+b.dataset.close).close()));
 document.addEventListener("keydown",e=>{if(!doc||document.querySelector("dialog[open]"))return;let mod=e.ctrlKey||e.metaKey;if(mod&&e.key.toLowerCase()==="z"){e.preventDefault();e.shiftKey?redo():undo()}else if(mod&&e.key.toLowerCase()==="y"){e.preventDefault();redo()}});
-async function init(){await loadPoemLibrary();restore()}
+async function init(){try{await loadPoemLibrary();restore()}finally{document.documentElement.classList.remove("booting")}}
 init();
