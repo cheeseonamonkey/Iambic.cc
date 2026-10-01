@@ -1,19 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://iambic.cc/poems.schema.json",
-  "title": "Iambic poem library",
+  "title": "Iambic demo poem library",
   "type": "array",
   "items": {
     "type": "object",
-    "required": ["title", "author", "text", "license"],
+    "required": [
+      "content",
+      "title",
+      "author",
+      "url"
+    ],
     "properties": {
-      "title": { "type": "string", "minLength": 1 },
-      "author": { "type": "string", "minLength": 1 },
-      "text": { "type": "string", "minLength": 1 },
-      "license": { "type": "string", "minLength": 1 },
-      "tags": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
-      "source": { "type": "string" },
-      "excerpt": { "type": "boolean" }
+      "content": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "author": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string"
+      }
     },
     "additionalProperties": false
   }
