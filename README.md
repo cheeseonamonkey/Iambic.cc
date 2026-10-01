@@ -23,20 +23,34 @@ The lexical resource happens to be derived from CMUdict pronunciation data, but 
 
 Pages generates `assets/pronunciations.bin` deterministically from a pinned CMUdict snapshot with `scripts/build-lexicon.mjs`. The generated binary is deliberately not committed.
 
-## Demo library
+## Layout
 
-`poems.json` intentionally has exactly four fields per entry:
-
-```json
-{
-  "content": "Each leaf casts its vote\nThe Autumn Referendum\nThe republic stands.",
-  "title": "Autumn Referendum",
-  "author": "cheeseonamonkey",
-  "url": ""
-}
+```text
+index.html
+css/app.css
+js/
+  analysis/
+    lexicon.js
+    stress.js
+    syllables.js
+  notation.js
+  prosody.js
+  render.js
+  ui.js
+data/
+  poems.json
+  poems.schema.json
+scripts/
+tests/
 ```
 
-The schema rejects additional fields.
+`data/poems.json` intentionally has exactly four fields per entry: `content`, `title`, `author`, and `url`. The schema rejects additional fields.
+
+## UI
+
+The top bar keeps only the common actions visible: Demo, theme, Share, and the `…` view/formatting menu. Secondary view controls, source editing, stats, notation help, font family, and font size live under `…`.
+
+PNG and PDF exports use the active theme, poem font, and poem size. The font menu is intentionally limited to eight choices and includes Rubik.
 
 See `THIRD_PARTY_NOTICES.md` for CMUdict attribution.
 
