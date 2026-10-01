@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
-function appContext(){const noop=()=>{};const node=()=>({classList:{add:noop,remove:noop,toggle:noop},addEventListener:noop,querySelectorAll:()=>[],setAttribute:noop,append:noop,appendChild:noop,style:{}});const context=vm.createContext({console,setTimeout,clearTimeout,Uint16Array,document:{querySelector:node,querySelectorAll:()=>[],createElement:node}});for(const f of ["app-1.js","app-notation.js"])vm.runInContext(fs.readFileSync(f,"utf8"),context,{filename:f});return context}
+function appContext(){const noop=()=>{};const node=()=>({classList:{add:noop,remove:noop,toggle:noop},addEventListener:noop,querySelectorAll:()=>[],setAttribute:noop,append:noop,appendChild:noop,style:{}});const context=vm.createContext({console,setTimeout,clearTimeout,Uint16Array,document:{querySelector:node,querySelectorAll:()=>[],createElement:node}});for(const f of ["js/prosody.js","js/notation.js"])vm.runInContext(fs.readFileSync(f,"utf8"),context,{filename:f});return context}
 function run(ctx,expression){return vm.runInContext(expression,ctx)}
 test("ordinary 5-7-5 regression",()=>{const c=appContext();const counts=run(c,`parseText("Maybe it will rain\\nSpiders crawling on my skin\\nCoffee tastes like dirt.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);assert.deepEqual([...counts],[5,7,5])});
 test("Autumn Referendum remains 5-7-5",()=>{const c=appContext();const counts=run(c,`parseText("Each leaf casts its vote.\\nThe Autumn Referendum\\nThe republic stands.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);assert.deepEqual([...counts],[5,7,5])});

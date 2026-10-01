@@ -24,11 +24,11 @@ jobs:
           node scripts/build-lexicon.mjs /tmp/cmudict.dict assets/pronunciations.bin
       - name: Syntax check
         run: |
-          node --check app-1.js
-          node --check app-notation.js
+          node --check js/prosody.js
+          node --check js/notation.js
           node --check app-pronunciation.js
-          node --check app-2.js
-          node --check app-3.js
+          node --check js/render.js
+          node --check js/ui.js
           node --check sw.js
           node --check scripts/build-lexicon.mjs
       - name: Unit tests
