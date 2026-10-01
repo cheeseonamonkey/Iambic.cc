@@ -3,77 +3,18 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
 
-function appContext() {
-  const noop = () => {};
-  const node = () => ({
-    classList: { add: noop, remove: noop, toggle: noop },
-    addEventListener: noop,
-    querySelectorAll: () => [],
-    setAttribute: noop,
-    append: noop,
-    appendChild: noop,
-    style: {},
-  });
-  const context = vm.createContext({
-    console,
-    setTimeout,
-    clearTimeout,
-    Uint16Array,
-    document: {
-      querySelector: node,
-      querySelectorAll: () => [],
-      createElement: node,
-    },
-  });
-  vm.runInContext(fs.readFileSync("app-1.js", "utf8"), context, { filename: "app-1.js" });
-  return context;
-}
+function appContext(){const noop=()=>{};const node=()=>({classList:{add:noop,remove:noop,toggle:noop},addEventListener:noop,querySelectorAll:()=>[],setAttribute:noop,append:noop,appendChild:noop,style:{}});const context=vm.createContext({console,setTimeout,clearTimeout,Uint16Array,document:{querySelector:node,querySelectorAll:()=>[],createElement:node}});vm.runInContext(fs.readFileSync("app-1.js","utf8"),context,{filename:"app-1.js"});return context}
+function run(ctx,expression){return vm.runInContext(expression,ctx)}
 
-function run(ctx, expression) {
-  return vm.runInContext(expression, ctx);
-}
-
-test("ordinary 5-7-5 regression", () => {
-  const c = appContext();
-  const counts = run(c, `parseText("Maybe it will rain\\nSpiders crawling on my skin\\nCoffee tastes like dirt.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);
-  assert.deepEqual([...counts], [5, 7, 5]);
-});
-
-test("Autumn Referendum remains 5-7-5", () => {
-  const c = appContext();
-  const counts = run(c, `parseText("Each leaf casts its vote.\\nThe Autumn Referendum\\nThe republic stands.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);
-  assert.deepEqual([...counts], [5, 7, 5]);
-});
-
-test("Jabberwocky opening survives nonce words", () => {
-  const c = appContext();
-  const counts = run(c, `parseText("'Twas brillig, and the slithy toves\\nDid gyre and gimble in the wabe:\\nAll mimsy were the borogoves,\\nAnd the mome raths outgrabe.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);
-  assert.deepEqual([...counts], [8, 8, 8, 6]);
-});
-
-test("Jabberwocky nonce words split plausibly and consistently", () => {
-  const c = appContext();
-  const expected = { brillig: 2, slithy: 2, toves: 1, gyre: 1, gimble: 2, borogoves: 3, mimsy: 2, frumious: 3, manxome: 2, uffish: 2, tulgey: 2, frabjous: 2, chortled: 2, galumphing: 3 };
-  for (const [word, count] of Object.entries(expected)) {
-    assert.equal(run(c, `syllabify(${JSON.stringify(word)}).length`), count, word);
-    assert.equal(run(c, `syllabify(${JSON.stringify(word)}).join("").toLowerCase()`), word, word + " round-trip");
-  }
-});
-
-test("parser preserves stanza and line structure", () => {
-  const c = appContext();
-  const shape = run(c, `(()=>{let d=parseText("one\\ntwo\\n\\nthree");return [d.stanzas.length,d.stanzas[0].lines.length,d.stanzas[1].lines.length]})()`);
-  assert.deepEqual([...shape], [2, 2, 1]);
-});
-
-test("reconcile preserves annotations after deleting an earlier word", () => {
-  const c = appContext();
-  const result = run(c, `(()=>{doc=parseText("red blue green");let s=allSyllables();s[2].sy.stress="strong";s[2].sy.boundary="foot";doc=reconcile("red green");let n=allSyllables(doc);return [n[1].sy.text,n[1].sy.stress,n[1].sy.boundary]})()`);
-  assert.deepEqual([...result], ["green", "strong", "foot"]);
-});
-
-test("reconcile preserves annotations after inserting a word", () => {
-  const c = appContext();
-  const result = run(c, `(()=>{doc=parseText("red blue");let s=allSyllables();s[1].sy.stress="medium";doc=reconcile("red bright blue");let n=allSyllables(doc);return [n.at(-1).sy.text,n.at(-1).sy.stress]})()`);
-  assert.deepEqual([...result], ["blue", "medium"]);
-});
+test("ordinary 5-7-5 regression",()=>{const c=appContext();const counts=run(c,`parseText("Maybe it will rain\\nSpiders crawling on my skin\\nCoffee tastes like dirt.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);assert.deepEqual([...counts],[5,7,5])});
+test("Autumn Referendum remains 5-7-5",()=>{const c=appContext();const counts=run(c,`parseText("Each leaf casts its vote.\\nThe Autumn Referendum\\nThe republic stands.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);assert.deepEqual([...counts],[5,7,5])});
+test("Jabberwocky opening survives nonce words",()=>{const c=appContext();const counts=run(c,`parseText("'Twas brillig, and the slithy toves\\nDid gyre and gimble in the wabe:\\nAll mimsy were the borogoves,\\nAnd the mome raths outgrabe.").stanzas[0].lines.map(lineStats).map(x=>x.syllables)`);assert.deepEqual([...counts],[8,8,8,6])});
+test("Jabberwocky nonce words split plausibly and round-trip",()=>{const c=appContext();const expected={brillig:2,slithy:2,toves:1,gyre:1,gimble:2,borogoves:3,mimsy:2,frumious:3,manxome:2,uffish:2,tulgey:2,frabjous:2,chortled:2,galumphing:3};for(const [word,count] of Object.entries(expected)){assert.equal(run(c,`syllabify(${JSON.stringify(word)}).length`),count,word);assert.equal(run(c,`syllabify(${JSON.stringify(word)}).join("")`),word,word+" round-trip")}});
+test("parser preserves stanza and line structure",()=>{const c=appContext();const shape=run(c,`(()=>{let d=parseText("one\\ntwo\\n\\nthree");return [d.stanzas.length,d.stanzas[0].lines.length,d.stanzas[1].lines.length]})()`);assert.deepEqual([...shape],[2,2,1])});
+test("manual bracket syntax forces boundaries and stress",()=>{const c=appContext();const got=run(c,`(()=>{let d=parseText("[I] [am] [VE][ry] [tall]");let s=allSyllables(d);return [d.text,s.map(x=>x.sy.text).join("|"),s.map(x=>x.sy.stress).join("|")]})()`);assert.deepEqual([...got],["I am VEry tall","I|am|VE|ry|tall","strong|weak|strong|weak|weak"])});
+test("manual syntax can force four syllables in one word",()=>{const c=appContext();const got=run(c,`(()=>{let d=parseText("[SA][li][enc][cy]");let w=d.stanzas[0].lines[0].segments[0];return [w.raw,w.syllables.length,w.syllables.map(x=>x.stress).join("|")]})()`);assert.deepEqual([...got],["SAlienccy",4,"strong|weak|weak|weak"])});
+test("escaped brackets remain literal text",()=>{const c=appContext();const got=run(c,String.raw`parseText("Use \\[this\\] literally").text`);assert.equal(got,"Use [this] literally")});
+test("source and ordinary capitalization are preserved",()=>{const c=appContext();const got=run(c,`(()=>{let d=parseText("McDONALD iPhone\\n[ODD][case]");return [d.source,d.text]})()`);assert.deepEqual([...got],["McDONALD iPhone\n[ODD][case]","McDONALD iPhone\nODDcase"])});
+test("unicode annotated plaintext is compact and inline",()=>{const c=appContext();const got=run(c,`annotatedText(parseText("[VE][ry] nice"))`);assert.equal(got,"´VE·˘ry nice")});
+test("old Stanzas/Boundaries settings migrate to one Structure toggle",()=>{const c=appContext();assert.equal(run(c,`migrateSettings({stanzas:false,boundaries:false}).structure`),false);assert.equal(run(c,`migrateSettings({stanzas:true,boundaries:false}).structure`),true);assert.equal(run(c,`migrateSettings({structure:false,stanzas:true,boundaries:true}).structure`),false)});
+test("reconcile reparses source syntax and preserves metadata",()=>{const c=appContext();const got=run(c,`(()=>{doc=parseText("old");doc.meta={title:"T"};let n=reconcile("[NEW]");return [n.source,n.text,n.stanzas[0].lines[0].segments[0].syllables[0].stress,n.meta.title]})()`);assert.deepEqual([...got],["[NEW]","NEW","strong","T"])});
