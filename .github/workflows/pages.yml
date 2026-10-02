@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -22,27 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - name: Ensure pronunciation lexicon exists
-        id: lexicon
-        run: |
-          if [ -f assets/pronunciations.bin ]; then
-            echo "generated=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          curl -fsSL https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict -o /tmp/cmudict.dict
-          node scripts/build-lexicon.mjs /tmp/cmudict.dict assets/pronunciations.bin
-          echo "generated=true" >> "$GITHUB_OUTPUT"
-      - name: Commit pronunciation lexicon
-        if: steps.lexicon.outputs.generated == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/pronunciations.bin
-          git commit -m "Commit pronunciation lexicon asset"
-          git push
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
