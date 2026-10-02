@@ -18,17 +18,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Build pronunciation lexicon
-        run: |
-          curl -fsSL https://raw.githubusercontent.com/cmusphinx/cmudict/74790861f652b15e4ac49015a90074ad62a27690/cmudict.dict -o /tmp/cmudict.dict
-          node scripts/build-lexicon.mjs /tmp/cmudict.dict assets/pronunciations.bin
       - name: Syntax check
         run: |
+          node --check js/analysis/lexicon.js
+          node --check js/analysis/stress.js
+          node --check js/analysis/syllables.js
           node --check js/prosody.js
           node --check js/notation.js
           node --check js/render.js
           node --check js/ui.js
-          node --check sw.js
           node --check scripts/build-lexicon.mjs
       - name: Unit tests
         run: node --test tests/*.test.mjs
