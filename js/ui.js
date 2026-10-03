@@ -7,8 +7,8 @@ function downloadBlob(name,blob){let a=document.createElement("a"),url=URL.creat
 function downloadText(name,content){downloadBlob(name,new Blob([content],{type:"text/plain;charset=utf-8"}))}
 function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(doc));doc=JSON.parse(undoStack.pop());ui.source.value=doc.source??doc.text??"";render();updateUndo()}
 function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(doc));doc=JSON.parse(redoStack.pop());ui.source.value=doc.source??doc.text??"";render();updateUndo()}
-function loadDemo(d,{quiet=false}={}){doc=parseText(d.text);doc.meta={title:d.title,author:d.author,source:d.source};undoStack=[];redoStack=[];ui.source.value=d.text;showWorkspace();render();if(!quiet)toast(`${d.author} · ${d.title}`)}
-function randomDemo(){if(!DEMOS.length)return;let i=Math.floor(Math.random()*DEMOS.length);if(DEMOS.length>1&&i===lastDemoIndex)i=(i+1+Math.floor(Math.random()*(DEMOS.length-1)))%DEMOS.length;lastDemoIndex=i;loadDemo(DEMOS[i],{quiet:true})}
+function loadDemo(d,{quiet=false,undoable=false}={}){if(undoable&&doc)pushUndo();doc=parseText(d.text);doc.meta={title:d.title,author:d.author,source:d.source};if(!undoable){undoStack=[];redoStack=[]}ui.source.value=d.text;showWorkspace();render();updateUndo();if(!quiet)toast(`${d.author} · ${d.title}`)}
+function randomDemo(){if(!DEMOS.length)return;let i=Math.floor(Math.random()*DEMOS.length);if(DEMOS.length>1&&i===lastDemoIndex)i=(i+1+Math.floor(Math.random()*(DEMOS.length-1)))%DEMOS.length;lastDemoIndex=i;loadDemo(DEMOS[i],{quiet:true,undoable:!!doc})}
 function restore(){try{let s=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(OLD_KEY)||"null");if(!s?.doc)return false;doc=migrateDoc(s.doc);Object.assign(settings,migrateSettings(s.settings||{}));ui.source.value=doc.source??doc.text??"";showWorkspace();render();return true}catch{return false}}
 function closeView(){if(ui.viewDialog?.open)ui.viewDialog.close()}
 function openFromView(dialog){closeView();dialog.showModal()}
