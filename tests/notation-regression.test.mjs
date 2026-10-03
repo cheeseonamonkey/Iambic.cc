@@ -20,7 +20,7 @@ test("partial notation keeps whole-word syllabification",()=>{
 
 test("punctuation-only runs are not syllables",()=>{
   const c=context();
-  const got=run(c,`(()=>{const line=parseText("wait - what -- ' okay [--]").stanzas[0].lines[0];return [lineStats(line).syllables,line.raw]})()`);
-  assert.equal(got[0],3);
-  assert.equal(got[1],"wait - what -- ' okay [--]");
+  const got=run(c,`(()=>{const punct=parseText("wait - what -- ' okay [--]").stanzas[0].lines[0],plain=parseText("wait what okay").stanzas[0].lines[0];return [lineStats(punct).syllables,lineStats(plain).syllables,punct.raw]})()`);
+  assert.equal(got[0],got[1]);
+  assert.equal(got[2],"wait - what -- ' okay [--]");
 });
