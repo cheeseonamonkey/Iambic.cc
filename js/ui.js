@@ -20,18 +20,19 @@ function makeExportCanvas(){const p=themePalette(),logicalWidth=1400,pad=80,text
 async function ensureFonts(){try{if(document.fonts)await document.fonts.ready}catch{}}
 async function downloadPng(){await ensureFonts();const c=makeExportCanvas();c.toBlob(blob=>blob?downloadBlob("iambic.png",blob):toast("Image export unavailable."),"image/png")}
 async function printPdf(){const w=window.open("","_blank");if(!w){toast("Allow pop-ups to save PDF.");return}await ensureFonts();const data=makeExportCanvas().toDataURL("image/png"),p=themePalette();w.document.write(`<!doctype html><title>Iambic export</title><style>@page{margin:0}html,body{margin:0;background:${p.bg}}img{display:block;width:100%;height:auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style><img src="${data}" onload="setTimeout(()=>window.print(),50)">`);w.document.close()}
+function live(el,apply){el.addEventListener("input",()=>{apply();render()})}
 
 ui.demo.addEventListener("click",randomDemo);ui.theme.addEventListener("click",toggleTheme);applyTheme();
 ui.analyze.addEventListener("click",()=>{let text=ui.source.value;if(!text.trim()){toast("Add some text first.");return}doc=parseText(text);doc.meta=null;undoStack=[];redoStack=[];showWorkspace();render()});
 ui.more.addEventListener("click",()=>ui.viewDialog.showModal());ui.share.addEventListener("click",()=>ui.shareDialog.showModal());
 ui.marks.addEventListener("click",()=>{settings.marks=!settings.marks;render()});ui.typography.addEventListener("click",()=>{settings.typography=!settings.typography;render()});ui.counts.addEventListener("click",()=>{settings.counts=!settings.counts;render()});ui.structure.addEventListener("click",()=>{settings.structure=!settings.structure;render()});
-ui.fontFamily.addEventListener("change",()=>{if(Object.hasOwn(FONT_FAMILIES,ui.fontFamily.value)){settings.font=ui.fontFamily.value;render()}});
-ui.fontSize.addEventListener("input",()=>{settings.fontSize=Math.max(16,Math.min(30,Number(ui.fontSize.value)||22));render()});
-ui.lineHeight.addEventListener("input",()=>{settings.lineHeight=Math.max(1.1,Math.min(1.6,Number(ui.lineHeight.value)||1.29));render()});
-ui.symbolScale.addEventListener("input",()=>{settings.symbolScale=Math.max(.65,Math.min(1.6,(Number(ui.symbolScale.value)||100)/100));render()});
-ui.syllableGap.addEventListener("input",()=>{settings.syllableGap=Math.max(0,Math.min(.16,(Number(ui.syllableGap.value)||0)/100));render()});
-ui.typeStrength.addEventListener("input",()=>{settings.typeStrength=Math.max(0,Math.min(1,(Number(ui.typeStrength.value)||0)/100));render()});
-ui.wrap.addEventListener("change",()=>{settings.wrap=ui.wrap.checked;render()});ui.separators.addEventListener("change",()=>{settings.separators=ui.separators.checked;render()});
+live(ui.fontFamily,()=>{if(Object.hasOwn(FONT_FAMILIES,ui.fontFamily.value))settings.font=ui.fontFamily.value});
+live(ui.fontSize,()=>{settings.fontSize=Math.max(16,Math.min(30,Number(ui.fontSize.value)||22))});
+live(ui.lineHeight,()=>{settings.lineHeight=Math.max(1.1,Math.min(1.6,Number(ui.lineHeight.value)||1.29))});
+live(ui.symbolScale,()=>{settings.symbolScale=Math.max(.65,Math.min(1.6,(Number(ui.symbolScale.value)||100)/100))});
+live(ui.syllableGap,()=>{settings.syllableGap=Math.max(0,Math.min(.16,(Number(ui.syllableGap.value)||0)/100))});
+live(ui.typeStrength,()=>{settings.typeStrength=Math.max(0,Math.min(1,(Number(ui.typeStrength.value)||0)/100))});
+live(ui.wrap,()=>{settings.wrap=ui.wrap.checked});live(ui.separators,()=>{settings.separators=ui.separators.checked});
 ui.stats.addEventListener("click",()=>{closeView();openStats()});ui.help.addEventListener("click",()=>openFromView($("#helpDialog")));ui.headEdit.addEventListener("click",openEdit);
 ui.applyEdit.addEventListener("click",()=>{let text=ui.editText.value;if(!text.trim()){toast("The poem cannot be empty.");return}pushUndo();doc=reconcile(text);ui.source.value=text;ui.editDialog.close();render()});
 ui.undo.addEventListener("click",undo);ui.redo.addEventListener("click",redo);
