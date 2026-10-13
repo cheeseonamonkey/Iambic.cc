@@ -110,7 +110,9 @@ def normalized(raw,sp):
     if ft is None: return None
     return dict(platform=p,source=sp["id"],post_id=p+":"+str(id_ or digest((txt,date,author))),
                 parent_id=p+":"+str(parent or ""),author_hash=digest(author),month=month(date),
-                engagement=score,**ft)
+                engagement=score,
+                reposts=num(raw.get("retweet")) if p=="x" else None,
+                replies=num(raw.get("reply")) if p=="x" else None,**ft)
 
 def chunk(directory,batch,ix):
     directory.mkdir(parents=True,exist_ok=True)
@@ -272,6 +274,18 @@ def analyze():
     summary={}
     files=[str(p) for p in (ROOT/"features").glob("*/*.parquet")]
     con=duckdb.connect()
+    con.execute("SET memory_limit='2GB'")
+    if files:
+        descriptive=con.execute("""
+          SELECT platform,source,count(*) AS n,
+                 avg(iamb) AS iamb_mean,avg(trochee) AS trochee_mean,
+                 avg(alliteration) AS alliteration_mean,avg(rhyme) AS rhyme_mean,
+                 avg(coverage) AS pronunciation_coverage
+          FROM read_parquet(?,union_by_name=true)
+          GROUP BY platform,source ORDER BY platform,source
+        """,[files]).df()
+        descriptive.to_csv(report/"phonetic_distribution.csv",index=False)
+        summary["distribution_sources"]=len(descriptive)
     for plat in ("reddit","x","bluesky"):
         if not files:
             summary[plat]={"error":"No platform features"};continue
@@ -285,9 +299,13 @@ def analyze():
         if len(df)<80:
             summary[plat]={"n":len(df),"error":"insufficient engagement data"};continue
         df["stratum"]=df["source"]+":"+df["month"]
-        t,meta=fit(df,"engagement",FEATS,"author_hash")
-        if len(t): t.to_csv(report/("engagement_"+plat+".csv"),index=False)
-        summary[plat]=meta
+        for metric in (("engagement","reposts","replies") if plat=="x" else ("engagement",)):
+            if metric not in df.columns or df[metric].notna().sum()<80:
+                continue
+            t,meta=fit(df,metric,FEATS,"author_hash")
+            key=plat+("_"+metric if metric!="engagement" else "")
+            if len(t): t.to_csv(report/("engagement_"+key+".csv"),index=False)
+            summary[key]=meta
     for name,pattern,binary in (("preference","paired/*/*.parquet",True),
                                 ("empathy","labeled/empathy/*/*.parquet",False),
                                 ("persuasion","labeled/cmv/*.parquet",True)):
@@ -315,7 +333,7 @@ def analyze():
             summary[name]=meta
     (report/"summary.json").write_text(json.dumps(summary,indent=2))
     lines=["# Prosody observational study","",
-           "Not CTR: Reddit net scores and X likes are engagement outcomes; Bluesky corpora lack comparable engagement fields.",
+           "Not CTR: Reddit net scores and X like/repost/reply counts are engagement outcomes; Bluesky corpora lack comparable engagement fields.",
            "Lexical stress is estimated from CMUdict; no actual vocal prosody was measured.",
            "Streaming samples are approximate, not population-random. All associations are noncausal.",
            "Regression: feature-SD effects, cluster-robust 95% intervals and Benjamini-Hochberg q-values.",
