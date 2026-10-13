@@ -1,0 +1,11 @@
+cmudict>=1.0.31,<2
+datasets>=3.0,<5
+huggingface_hub>=0.26
+duckdb>=1.1
+pyarrow>=16
+numpy>=1.26
+pandas>=2.0
+requests>=2.31
+scipy>=1.11
+statsmodels>=0.14
+pytest>=8
