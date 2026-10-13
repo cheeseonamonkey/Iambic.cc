@@ -6,8 +6,8 @@ The notebook downloads a **pinned copy of pipeline.py** from this repository.
 ## Scope and outcomes
 
 - **Reddit:** 3,000,000 comments, 500,000 from each of six subreddit slices of HuggingFaceGECLM/REDDIT_comments. Outcome: net score (not votes/impressions).
-- **X:** 3,000,000 posts from blockmesh/tweets. Outcome: captured likes (not CTR); retweet and reply counts are available in the source schema but not yet outcomes of this pilot.
-- **Bluesky:** 1,500,000 each from Roronotalt/bluesky-five-million and alpindale/two-million-bluesky-posts. **No comparable engagement metric in these source schemas.** These are included for phonetic distribution and overlap/network follow-ups. An engagement regression is intentionally skipped.
+- **X:** 3,000,000 posts from blockmesh/tweets. Outcomes: captured likes, retweet counts, and reply counts (none are CTR).
+- **Bluesky:** 1,500,000 each from Roronotalt/bluesky-five-million and alpindale/two-million-bluesky-posts. **No comparable engagement metric in these source schemas.** These are included in the phonetic distribution CSV and overlap/network follow-ups. An engagement regression is intentionally skipped.
 - **Stanford SHP-2:** up to 12,000 labeled response comparisons per sampled Reddit domain × eight domains, plus a 20% post-grouped independent replication split. This is *not* the complete 4.8M corpus.
 - **EPITOME:** all available Reddit examples annotated for emotional reactions, interpretations, and explorations; models are run separately from likes and scores.
 - **Cornell Winning Arguments:** all available annotated CMV replies, labeled for persuasion success (not causal intervention).
@@ -20,7 +20,7 @@ Datasets are not automatically downloaded merely because they are publicly hoste
 
 ### Artifacts
 
-Reports: reports/engagement_reddit.csv, engagement_x.csv (if populated), preference_train.csv, preference_holdout.csv, empathy.csv, persuasion.csv, summary.json and report.md. Reports omit all raw post text. Features are numeric plus hashed ID, author, parent, source, and month.
+Reports: reports/phonetic_distribution.csv, engagement_reddit.csv, engagement_x.csv, engagement_x_reposts.csv, engagement_x_replies.csv (if populated), preference_train.csv, preference_holdout.csv, empathy.csv, persuasion.csv, summary.json and report.md. Reports omit all raw post text. Features are numeric plus hashed ID, author, parent, source, and month.
 
 ### Methods
 
