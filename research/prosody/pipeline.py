@@ -19,7 +19,7 @@ SEED=1729
 BATCH=5000
 COLS="iamb trochee alternation alliteration assonance consonance rhyme syllables_per_word lexical_diversity".split()
 CONTROLS="log_words sentiment question exclamation coverage truncated".split()
-FEATS=COLS+CONTROLS
+FEATS=[x for x in COLS if x!="trochee"]+CONTROLS
 LEX=cmudict.dict()
 WORD=re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
 URL=re.compile(r"https?://\S+|www\.\S+")
@@ -129,7 +129,7 @@ def ingest(sp):
     state=json.loads(cp.read_text()) if cp.exists() else {}
     accepted=int(state.get("accepted",0))
     if not APPROVED[sp["platform"]]: return {"source":sp["id"],"status":"blocked: permission not confirmed"}
-    signature=digest((sp,SEED))
+    signature=digest(({k:v for k,v in sp.items() if k!="quota"},SEED))
     if state and state.get("signature")!=signature: raise RuntimeError("Config changed; use a fresh output directory")
     if accepted>=sp["quota"]: return {"source":sp["id"],"status":"complete","n":accepted}
     info=HfApi().dataset_info(sp["repo"])
@@ -276,7 +276,7 @@ def analyze():
         if not files:
             summary[plat]={"error":"No platform features"};continue
         df=con.execute("""
-        SELECT * EXCLUDE rn FROM (
+        SELECT * EXCLUDE (rn) FROM (
           SELECT *,row_number() OVER (PARTITION BY post_id ORDER BY source) AS rn
           FROM read_parquet(?,union_by_name=true)
           WHERE platform=? AND engagement IS NOT NULL AND coverage>=.65
