@@ -1,0 +1,30 @@
+name: Prosody CPU Smoke Tests
+on:
+  push:
+    branches: [research/cross-platform-prosody-pilot]
+    paths:
+      - 'research/prosody/**'
+      - '.github/workflows/prosody_cpu.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'research/prosody/requirements.txt'
+      - run: python -m pip install -r research/prosody/requirements.txt
+      - run: python -m py_compile research/prosody/pipeline.py
+      - run: python -m pytest -q research/prosody/tests
+      - run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          nb=json.loads(Path('research/prosody/Prosody_CPU_Study.ipynb').read_text())
+          assert nb['nbformat']==4 and len(nb['cells'])>=5
+          print('Notebook format valid:',len(nb['cells']),'cells')
+          PY
